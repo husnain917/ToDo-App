@@ -1,12 +1,18 @@
 import { useRef,useState,useEffect } from 'react'
 import { useDispatch } from "react-redux";
-import { addEmploye } from "../../store/actions/EmployeeActions";
+import { addEmploye,updateEmploye } from "../../store/actions/EmployeeActions";
+import { useLocation } from "react-router-dom";
+
+
 export default function UseAddEmployee() {
 
     // Dispatch Actions
     const dispatch = useDispatch();
 
-    
+    // location
+    let location = useLocation();
+
+
     // States
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -14,8 +20,8 @@ export default function UseAddEmployee() {
     const [phoneNum, setPhoneNum] = useState('');
     const [date, setdate] = useState('');
     const [loading, setLoading] = useState(false);
-    const [buttonUp, setButtonUp] = useState(true);
-    const [isUpdate, setIsUpdate] = useState({});
+    const [updateBtn, setUpdateBtn] = useState(true);
+    const [updateId, setUpdateId] = useState(0);
 
     // Focus Function start
     let textInputOne = useRef(null);
@@ -62,20 +68,48 @@ export default function UseAddEmployee() {
         setdate('');
     }
     // Add Data End
+    
+    // Update Data
+    useEffect(() => {
+        if (location.state !== null) {
+            updateHandler(location);
+            // console.log(location,"add data");
+        }
+    }, []);
+    
+
+    // Update Handler
+    const updateHandler = (location) => {
+        setFirstName(location.state.rowData.data.firstName);
+        setLastName(location.state.rowData.data.lastName);
+        setEmail(location.state.rowData.data.email);
+        setPhoneNum(location.state.rowData.data.phoneNum);
+        setdate(location.state.rowData.data.date);
+        setUpdateId(location.state.rowData.id);
+        setUpdateBtn(false);
+    }
+
 
     // Update Data
-        let arrayData = []; 
-    const updateData = (items) => {
-        arrayData = [...arrayData,items];
-    }
-   
+    const updateCtaHandler = () => {
 
-    useEffect(() => {
-        setIsUpdate(arrayData)
-        console.log(isUpdate);
-    }, [])
-    
-    
+        let employe = {
+            id : updateId,
+            firstName : firstName,
+            lastName : lastName,
+            email : email,
+            phoneNum : phoneNum,
+            date : date,
+        }
+        dispatch(updateEmploye(employe,setLoading));
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPhoneNum('');
+        setdate('');
+        setUpdateBtn(true);
+    }
+
     return {
         focusHandlerName,
         focusHandlerLastName,
@@ -96,7 +130,7 @@ export default function UseAddEmployee() {
         addEmployee,
         loading,
         setLoading,
-        updateData,
-        buttonUp,
+        updateBtn,
+        updateCtaHandler,
     }
 }

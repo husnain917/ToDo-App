@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../config/FireBase";
 
 
@@ -10,6 +10,10 @@ export const SHOW_EMPLOYEE = "SHOW_EMPLOYEE";
 
 // Delete Employee
 export const DELETE_EMPLOYEE = "DELETE_EMPLOYEE";
+
+// Update Employee
+export const UPDATE_EMPLOYEE = "UPDATE_EMPLOYEE";
+
 
 
 
@@ -73,6 +77,29 @@ export const deleteEmploye = (id, setLoading) => async (dispatch) => {
     }
     catch (e) {
         console.error("Error delete document: ", e);
+    }
+    finally {
+        setLoading(false);
+    }
+}
+
+
+// Update Handler
+export const updateEmploye = (data,setLoading) => async (dispatch) => {
+    setLoading(true);
+    try {
+        const updateRef = doc(db, "employees", data.id);
+        await updateDoc(updateRef, {
+            data,
+        });
+
+        dispatch({
+            type: UPDATE_EMPLOYEE,
+            payload: data,
+        })
+    }
+    catch (e) {
+        console.error("Error Update document: ", e);
     }
     finally {
         setLoading(false);

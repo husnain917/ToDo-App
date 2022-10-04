@@ -5,7 +5,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { FallingLines } from "react-loader-spinner";
 import SearchOffIcon from '@mui/icons-material/SearchOff';
-import { Link } from "react-router-dom";
 
 export default function ShowEmployee() {
 
@@ -58,11 +57,9 @@ export default function ShowEmployee() {
                               <TableCell align='center'> {items.data.phoneNum} </TableCell>
                               <TableCell align='center'> {items.data.date} </TableCell>
                               <TableCell align='right'>
-                                <Link to = {"/"}>
-                                  <IconButton onClick={() => { updateData(items) }} >
-                                    <EditIcon color='primary' />
-                                  </IconButton>
-                                </Link>
+                                <IconButton onClick={() => { updateData(items) }} >
+                                  <EditIcon color='primary' />
+                                </IconButton>
                               </TableCell>
                               <TableCell align='left'>
                                 <IconButton onClick={() => { deleteHandler(items.id) }}>

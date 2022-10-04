@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,8 +15,18 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import LoginIcon from '@mui/icons-material/Login';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Link } from 'react-router-dom';
-import { SwipeableDrawer } from '@mui/material';
+import { Button, SwipeableDrawer } from '@mui/material';
+import { FallingLines } from "react-loader-spinner";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+// dispatch
+import { useDispatch, useSelector } from "react-redux";
+
+// Actions
+import { logOutUser } from "../../store/actions/LogInAction";
 
 const drawerWidth = 240;
 
@@ -77,6 +87,30 @@ export default function SideBar({ children }) {
         setOpen(false);
     };
 
+    // Store
+    const logInUserName = useSelector((store) => store.LogInReducer.user);
+    const currentUserName = logInUserName.displayName;
+    // state
+    const [loader, setLoader] = useState(false);
+
+    // dispatch
+    const dispatch = useDispatch();
+
+    // Logout
+    const logOutHandler = () => {
+        dispatch(logOutUser(setLoader));
+    }
+
+    // loading
+    if (loader) {
+        return (
+            <>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "73vh" }}>
+                    <FallingLines width="110" color="blue" />
+                </div>
+            </>
+        )
+    }
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -91,9 +125,11 @@ export default function SideBar({ children }) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                         To Do App
                     </Typography>
+                    <Button color="inherit">{currentUserName ? currentUserName : <AccountCircleIcon />}</Button>
+                    <Button color="inherit" onClick={logOutHandler}>Logout</Button>
                 </Toolbar>
             </AppBar>
             <SwipeableDrawer
@@ -121,7 +157,7 @@ export default function SideBar({ children }) {
                 <List>
                     <Link to="/" style={{ textDecoration: "none" }}>
                         <ListItem button>
-                            <ListItemIcon style={{marginLeft:"15px"}} >
+                            <ListItemIcon style={{ marginLeft: "15px" }} >
                                 <PersonAddAltIcon color='primary' />
                             </ListItemIcon>
                             <ListItemText primary="Add Employee" />
@@ -129,10 +165,26 @@ export default function SideBar({ children }) {
                     </Link>
                     <Link to="/showEmployee" style={{ textDecoration: "none" }}>
                         <ListItem button>
-                            <ListItemIcon style={{marginLeft:"15px"}}>
+                            <ListItemIcon style={{ marginLeft: "15px" }}>
                                 <VisibilityIcon color='primary' />
                             </ListItemIcon>
                             <ListItemText primary="Show Employee" />
+                        </ListItem>
+                    </Link>
+                    <Link to="/logIn" style={{ textDecoration: "none" }}>
+                        <ListItem button>
+                            <ListItemIcon style={{ marginLeft: "15px" }}>
+                                <LoginIcon color='primary' />
+                            </ListItemIcon>
+                            <ListItemText primary="Login" />
+                        </ListItem>
+                    </Link>
+                    <Link to="/signUp" style={{ textDecoration: "none" }}>
+                        <ListItem button>
+                            <ListItemIcon style={{ marginLeft: "15px" }}>
+                                <LockOpenIcon color='primary' />
+                            </ListItemIcon>
+                            <ListItemText primary="Sign UP" />
                         </ListItem>
                     </Link>
                 </List>

@@ -6,8 +6,8 @@ import { FallingLines } from "react-loader-spinner";
 
 export default function AddEmployee() {
   // Custom Hook
-  const { focusHandlerName, focusHandlerLastName, focusHandlerEmail, textInputOne, textInputTwo, textInputThree, setFirstName, setLastName, setEmail, setPhoneNum, setdate, firstName, lastName, email, phoneNum, date, addEmployee, loading, buttonUp } = UseAddEmployee();
-  
+  const { focusHandlerName, focusHandlerLastName, focusHandlerEmail, textInputOne, textInputTwo, textInputThree, setFirstName, setLastName, setEmail, setPhoneNum, setdate, firstName, lastName, email, phoneNum, date, addEmployee, loading,updateBtn,updateCtaHandler } = UseAddEmployee();
+
   // loading
   if (loading) {
     return (
@@ -66,11 +66,11 @@ export default function AddEmployee() {
               </Grid>
               <Box mt={2}>
                 {
-                  buttonUp ?
+                  updateBtn ?
                     <Button variant='contained' onClick={addEmployee}>
                       Add Employee
                     </Button> :
-                    <Button variant='contained'>
+                    <Button variant='contained' onClick={updateCtaHandler}>
                       Update
                     </Button>
                 }
